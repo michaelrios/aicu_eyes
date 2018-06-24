@@ -4,5 +4,7 @@
 *.dylib
 
 *.test
+.idea
+.idea/*
 
 /vendor

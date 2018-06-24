@@ -12,7 +12,7 @@
   <component name="FileEditorManager">
     <leaf>
       <file leaf-file-name="haar.go" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/../aicu_eyes/haar.go">
+        <entry file="file://$PROJECT_DIR$/haar.go">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="67">
               <caret line="35" column="34" selection-start-line="35" selection-start-column="25" selection-end-line="35" selection-end-column="34" />
@@ -24,7 +24,7 @@
         </entry>
       </file>
       <file leaf-file-name="ssd.go" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/../aicu_eyes/ssd.go">
+        <entry file="file://$PROJECT_DIR$/ssd.go">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="407">
               <caret line="58" column="32" selection-start-line="58" selection-start-column="32" selection-end-line="58" selection-end-column="32" />
@@ -36,7 +36,7 @@
         </entry>
       </file>
       <file leaf-file-name="imgprep.go" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/../aicu_eyes/vendor/github.com/EdlinOrg/prominentcolor/imgprep.go">
+        <entry file="file://$PROJECT_DIR$/vendor/github.com/EdlinOrg/prominentcolor/imgprep.go">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="197">
               <caret line="29" column="4" selection-start-line="29" selection-start-column="4" selection-end-line="29" selection-end-column="4" />
@@ -45,7 +45,7 @@
         </entry>
       </file>
       <file leaf-file-name="kmeans.go" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/../aicu_eyes/vendor/github.com/EdlinOrg/prominentcolor/kmeans.go">
+        <entry file="file://$PROJECT_DIR$/vendor/github.com/EdlinOrg/prominentcolor/kmeans.go">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="197">
               <caret line="55" column="4" selection-start-line="55" selection-start-column="4" selection-end-line="55" selection-end-column="4" />
@@ -63,7 +63,7 @@
         </entry>
       </file>
       <file leaf-file-name="motion.go" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/../aicu_eyes/motion.go">
+        <entry file="file://$PROJECT_DIR$/motion.go">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="478">
               <caret line="86" column="53" selection-start-line="86" selection-start-column="53" selection-end-line="86" selection-end-column="74" />
@@ -75,7 +75,7 @@
         </entry>
       </file>
       <file leaf-file-name=".gitignore" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/../aicu_eyes/.gitignore">
+        <entry file="file://$PROJECT_DIR$/.gitignore">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="105">
               <caret line="7" column="7" selection-start-line="7" selection-start-column="7" selection-end-line="7" selection-end-column="7" />
@@ -105,11 +105,11 @@
       <list>
         <option value="$PROJECT_DIR$/.gitignore" />
         <option value="$PROJECT_DIR$/main.go" />
-        <option value="$PROJECT_DIR$/../aicu_eyes/main.go" />
-        <option value="$PROJECT_DIR$/../aicu_eyes/haar.go" />
-        <option value="$PROJECT_DIR$/../aicu_eyes/ssd_data/deploy.prototxt" />
-        <option value="$PROJECT_DIR$/../aicu_eyes/motion.go" />
-        <option value="$PROJECT_DIR$/../aicu_eyes/ssd.go" />
+        <option value="$PROJECT_DIR$/main.go" />
+        <option value="$PROJECT_DIR$/haar.go" />
+        <option value="$PROJECT_DIR$/ssd_data/deploy.prototxt" />
+        <option value="$PROJECT_DIR$/motion.go" />
+        <option value="$PROJECT_DIR$/ssd.go" />
       </list>
     </option>
   </component>
@@ -164,8 +164,8 @@
       <recent name="$PROJECT_DIR$/data" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/../aicu_eyes/ssd_data" />
-      <recent name="$PROJECT_DIR$/../aicu_eyes/haar_face_detect" />
+      <recent name="$PROJECT_DIR$/ssd_data" />
+      <recent name="$PROJECT_DIR$/haar_face_detect" />
       <recent name="$PROJECT_DIR$/data" />
     </key>
   </component>
@@ -232,21 +232,21 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/../aicu_eyes/haar_data/haarcascade_frontalface_default.xml">
+    <entry file="file://$PROJECT_DIR$/haar_data/haarcascade_frontalface_default.xml">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="75">
           <caret line="5" column="25" lean-forward="true" selection-start-line="5" selection-start-column="25" selection-end-line="5" selection-end-column="25" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/../aicu_eyes/.gitignore">
+    <entry file="file://$PROJECT_DIR$/.gitignore">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="105">
           <caret line="7" column="7" selection-start-line="7" selection-start-column="7" selection-end-line="7" selection-end-column="7" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/../aicu_eyes/ssd_data/deploy.prototxt">
+    <entry file="file://$PROJECT_DIR$/ssd_data/deploy.prototxt">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="584">
           <caret line="1788" column="1" selection-start-line="1788" selection-start-column="1" selection-end-line="1788" selection-end-column="1" />
@@ -263,21 +263,21 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/../aicu_eyes/vendor/gocv.io/x/gocv/imgproc.go">
+    <entry file="file://$PROJECT_DIR$/vendor/gocv.io/x/gocv/imgproc.go">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="10562">
           <caret line="773" column="5" selection-start-line="773" selection-start-column="5" selection-end-line="773" selection-end-column="5" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/../aicu_eyes/vendor/github.com/EdlinOrg/prominentcolor/imgprep.go">
+    <entry file="file://$PROJECT_DIR$/vendor/github.com/EdlinOrg/prominentcolor/imgprep.go">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="197">
           <caret line="29" column="4" selection-start-line="29" selection-start-column="4" selection-end-line="29" selection-end-column="4" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/../aicu_eyes/vendor/github.com/EdlinOrg/prominentcolor/kmeans.go">
+    <entry file="file://$PROJECT_DIR$/vendor/github.com/EdlinOrg/prominentcolor/kmeans.go">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="197">
           <caret line="55" column="4" selection-start-line="55" selection-start-column="4" selection-end-line="55" selection-end-column="4" />
@@ -291,7 +291,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/../aicu_eyes/motion.go">
+    <entry file="file://$PROJECT_DIR$/motion.go">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="478">
           <caret line="86" column="53" selection-start-line="86" selection-start-column="53" selection-end-line="86" selection-end-column="74" />
@@ -301,7 +301,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/../aicu_eyes/haar.go">
+    <entry file="file://$PROJECT_DIR$/haar.go">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="67">
           <caret line="35" column="34" selection-start-line="35" selection-start-column="25" selection-end-line="35" selection-end-column="34" />
@@ -311,7 +311,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/../aicu_eyes/ssd.go">
+    <entry file="file://$PROJECT_DIR$/ssd.go">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="407">
           <caret line="58" column="32" selection-start-line="58" selection-start-column="32" selection-end-line="58" selection-end-column="32" />
