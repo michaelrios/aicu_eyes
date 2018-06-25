@@ -38,6 +38,7 @@ func (dynamo Dynamo) CreateSession() (db DbSessionDynamo) {
 type DbSessionDynamo interface {
 	ScanRequest(input *dynamodb.ScanInput) dynamodb.ScanRequest
 	Insert(input *dynamodb.PutItemInput) dynamodb.PutItemRequest
+	Update(input *dynamodb.UpdateItemInput) dynamodb.UpdateItemRequest
 	ListTablesRequest(input *dynamodb.ListTablesInput) dynamodb.ListTablesRequest
 	IsHealthy() bool
 }

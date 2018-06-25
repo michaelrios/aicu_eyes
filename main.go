@@ -3,7 +3,13 @@ package main
 import (
 	"fmt"
 	"github.com/EdlinOrg/prominentcolor"
+	"github.com/aws/aws-sdk-go-v2/aws"
+	"github.com/aws/aws-sdk-go-v2/service/dynamodb"
+	"github.com/aws/aws-sdk-go-v2/service/dynamodb/dynamodbattribute"
 	"github.com/disintegration/imaging"
+	"github.com/joho/godotenv"
+	"github.com/michaelrios/aicu_eyes/app"
+	"github.com/satori/go.uuid"
 	"gocv.io/x/gocv"
 	"image"
 	"image/color"
@@ -12,10 +18,8 @@ import (
 	"os"
 	"strconv"
 	"time"
-	"github.com/michaelrios/aicu_eyes/app"
-	"github.com/aws/aws-sdk-go-v2/service/dynamodb"
-	"github.com/aws/aws-sdk-go-v2/service/dynamodb/dynamodbattribute"
-	"github.com/joho/godotenv"
+	"net/http"
+	"io/ioutil"
 )
 
 func min(a, b float32) float32 {
@@ -44,56 +48,45 @@ func main() {
 	}
 
 	dynamoConfig := &app.Dynamo{
-		Host: "https://dynamodb.us-east-1.amazonaws.com",
+		Host:   "https://dynamodb.us-east-1.amazonaws.com",
 		Region: "us-east-1",
-		Key: os.Getenv("AWS_KEY"),
+		Key:    os.Getenv("AWS_KEY"),
 		Secret: os.Getenv("AWS_SECRET"),
 	}
-	db := dynamoConfig.CreateSession()
 
-	if db.IsHealthy() {
-		fmt.Println("DB is connected")
-	} else {
-		log.Fatal("DB is not Connected")
-	}
+	var db app.DbSessionDynamo
 
-	attributeMap, err := dynamodbattribute.MarshalMap(Customer{
-		Id: "999",
-		PerceivedTeam: "dodgers",
-		ShirtColors: []ShirtColor{
-			ShirtColor{Color: "blue"},
-		},
-		StartTime: time.Now(),
-	})
+	go func() {
+		db = dynamoConfig.CreateSession()
 
-	tableName := "perceived_table"
-	insertRequest := db.Insert(&dynamodb.PutItemInput{
-		Item: attributeMap,
-		TableName: &tableName,
-	})
-	output, err := insertRequest.Send()
-	if err != nil {
-		log.Fatalf("no insert: %s", err.Error())
-	}
+		if db.IsHealthy() {
+			fmt.Println("DB is connected")
+		} else {
+			log.Fatal("DB is not Connected")
+		}
+	}()
+	time.Sleep(time.Second * time.Duration(2))
 
-	fmt.Println(output.String())
-
-
-	//adaptor := raspi.NewAdaptor()
+	//attributeMap, err := dynamodbattribute.MarshalMap(Customer{
+	//	Id: "999",
+	//	PerceivedTeam: "dodgers",
+	//	ShirtColors: []ShirtColor{
+	//		ShirtColor{Color: "blue"},
+	//	},
+	//	StartTime: time.Now(),
+	//})
 	//
-	//echo := gpio.NewDirectPinDriver(adaptor, "26")
-	//echo.DigitalWrite(byte(false))
-	//time.Sleep(time.Microsecond(2))
+	//tableName := "perceived_table"
+	//insertRequest := db.Insert(&dynamodb.PutItemInput{
+	//	Item: attributeMap,
+	//	TableName: &tableName,
+	//})
 	//
-	//trigger := gpio.NewDirectPinDriver(adaptor, "20")
-	//echo.DigitalWrite(byte(true))
-	//time.Sleep(time.Microsecond(10))
-	//
-	//interval, err := echo.DigitalRead()
+	//output, err := insertRequest.Send()
 	//if err != nil {
-	//	fmt.Println(err.Error)
+	//	log.Fatalf("no insert: %s", err.Error())
 	//}
-	//fmt.Println(interval)
+	//fmt.Println(output.String())
 
 	// parse args
 	deviceID, _ := strconv.Atoi(os.Args[1])
@@ -125,6 +118,9 @@ func main() {
 	green := color.RGBA{0, 255, 0, 0}
 	fmt.Printf("Start reading camera device: %v\n", deviceID)
 
+	newFaceDelay := 10
+	var faceFound bool
+	var faceNotFoundCounter = newFaceDelay
 	var c, r int
 	var W, H, left, right, top, bottom, confidence float32
 	var errImg error
@@ -132,11 +128,12 @@ func main() {
 	var detections, detBlob, blob gocv.Mat
 	var originalImg image.Image
 	var centroidColor color.RGBA
+	var customer *Customer
 
 	prominentcolor.MaskBlack = prominentcolor.MaskWhite
 	prominentcolor.MaskGreen = prominentcolor.MaskWhite
 
-	for i := 0; i < 500; i++ {
+	for i := 0; i < 5000; i++ {
 		if ok := webcam.Read(&img); !ok {
 			fmt.Printf("Error cannot read device %d\n", deviceID)
 			return
@@ -171,7 +168,13 @@ func main() {
 			log.Fatalf("Failed converting Mat to Image: %s", errImg.Error())
 		}
 
+		faceFound = false
+		team := ""
+		shirtColors := make([]ShirtColor, 0)
+
 		for r = 0; r < detections.Rows(); r++ {
+			//fmt.Println("*")
+
 			// you would want the classid for general object detection,
 			// but we do not need it here.
 			// classid := detections.GetFloatAt(r, 1)
@@ -180,6 +183,7 @@ func main() {
 			if confidence < 0.4 {
 				continue
 			}
+			faceFound = true
 
 			left = detections.GetFloatAt(r, 3) * W
 			top = detections.GetFloatAt(r, 4) * H
@@ -210,12 +214,98 @@ func main() {
 				hsl := convertRGBToHSL(centroidColor)
 
 				gocv.Rectangle(&img, rect, centroidColor, 30-((c+1)*10))
-				gocv.PutText(&img, hsl.Classify(), image.Pt(10, 20*(c+1)), gocv.FontHersheyPlain, 2, green, 2)
+				colorName := hsl.Classify()
+				gocv.PutText(&img, colorName, image.Pt(10, 20*(c+1)), gocv.FontHersheyPlain, 2, green, 2)
 
-				fmt.Print(convertRGBToHex(centroidColor), " ")
+				shirtColors = append(shirtColors, ShirtColor{Color: colorName})
+
+				if colorName == "blue" {
+					team = "ucla"
+				} else if colorName == "red" && team != "ucla" {
+					team = "usc"
+				} else {
+					if team == "" {
+						team ="unknown"
+					}
+				}
 			}
 		}
-		fmt.Println()
+
+		if faceFound == false {
+			if faceNotFoundCounter >= newFaceDelay {
+				if customer.EndTime == (time.Time{}) {
+					customer.EndTime = time.Now()
+
+					tableName := "perceived_table"
+					updateRequest := db.Update(&dynamodb.UpdateItemInput{
+						ExpressionAttributeValues: map[string]dynamodb.AttributeValue{
+							":end_time": {
+								S: aws.String(customer.EndTime.String()),
+							},
+						},
+						UpdateExpression: aws.String("set end_time = :end_time"),
+						Key: map[string]dynamodb.AttributeValue{
+							"id": {
+								S: aws.String(customer.Id),
+							},
+						},
+						TableName: &tableName,
+					})
+					output, err := updateRequest.Send()
+					if err != nil {
+						fmt.Println(err)
+					} else {
+						fmt.Println(output.String())
+					}
+
+					fmt.Printf("%+v", customer)
+				}
+				fmt.Println("ready for new face")
+			} else {
+				fmt.Println("no face")
+				if faceNotFoundCounter < newFaceDelay {
+					faceNotFoundCounter++
+				}
+			}
+		} else {
+			if faceNotFoundCounter < newFaceDelay {
+				// known face
+				//fmt.Println("known face")
+				// do nothing
+
+			} else {
+				url := fmt.Sprintf("http://10.100.31.138?color=%s", team)
+				response, err := http.Get(url)
+				if err != nil {
+					fmt.Println(err.Error())
+				}
+				contents, err := ioutil.ReadAll(response.Body)
+				if err != nil {
+					fmt.Println(err.Error())
+				}
+				fmt.Println(url, string(contents))
+
+				// unknown face
+				newId := uuid.NewV4().String()
+
+				customer = &Customer{
+					Id:            newId,
+					DeviceId:      "999",
+					PerceivedTeam: team,
+					ShirtColors:   shirtColors,
+					StartTime:     time.Now(),
+				}
+				attributeMap, _ := dynamodbattribute.MarshalMap(customer)
+				tableName := "perceived_table"
+				insertRequest := db.Insert(&dynamodb.PutItemInput{
+					Item:      attributeMap,
+					TableName: &tableName,
+				})
+				insertRequest.Send()
+				fmt.Printf("%+v", customer)
+			}
+			faceNotFoundCounter = 0
+		}
 
 		window.IMShow(img)
 		if window.WaitKey(1) >= 0 {
@@ -225,11 +315,12 @@ func main() {
 }
 
 type Customer struct {
-	Id            string `json:"id"`
-	PerceivedTeam string `json:"perceived_team"`
+	Id            string       `json:"id"`
+	DeviceId      string       `json:"device_id"`
+	PerceivedTeam string       `json:"perceived_team"`
 	ShirtColors   []ShirtColor `json:"shirt_colors"`
-	StartTime     time.Time `json:"start_time"`
-	EndTime       time.Time `json:"end_time"`
+	StartTime     time.Time    `json:"start_time"`
+	EndTime       time.Time    `json:"end_time"`
 }
 
 type ShirtColor struct {
@@ -251,7 +342,7 @@ func (hsl HSL) Classify() string {
 		return "white"
 	}
 
-	if hsl.S < 0.2 {
+	if hsl.S < 0.1 {
 		return "gray"
 	}
 
