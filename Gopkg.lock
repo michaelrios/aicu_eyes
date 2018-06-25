@@ -8,22 +8,56 @@
   revision = "27c67d28df53d05c379562e601957fc7da0fc212"
 
 [[projects]]
+  name = "github.com/aws/aws-sdk-go-v2"
+  packages = [
+    "aws",
+    "aws/awserr",
+    "aws/defaults",
+    "aws/ec2metadata",
+    "aws/ec2rolecreds",
+    "aws/endpointcreds",
+    "aws/endpoints",
+    "aws/external",
+    "aws/signer/v4",
+    "aws/stscreds",
+    "internal/awsutil",
+    "internal/sdk",
+    "private/protocol",
+    "private/protocol/json/jsonutil",
+    "private/protocol/jsonrpc",
+    "private/protocol/query",
+    "private/protocol/query/queryutil",
+    "private/protocol/rest",
+    "private/protocol/xml/xmlutil",
+    "service/dynamodb",
+    "service/dynamodb/dynamodbattribute",
+    "service/sts"
+  ]
+  revision = "ff1a530c31507c97cf5edbee226e604ca08661cc"
+  version = "v2.0.0-preview.4"
+
+[[projects]]
   name = "github.com/disintegration/imaging"
   packages = ["."]
   revision = "bbcee2f5c9d5e94ca42c8b50ec847fec64a6c134"
   version = "v1.4.2"
 
 [[projects]]
-  branch = "master"
-  name = "github.com/hashicorp/errwrap"
+  name = "github.com/go-ini/ini"
   packages = ["."]
-  revision = "7554cd9344cec97297fa6649b055a8c98c2a1e55"
+  revision = "06f5f3d67269ccec1fe5fe4134ba6e982984f7f5"
+  version = "v1.37.0"
 
 [[projects]]
-  branch = "master"
-  name = "github.com/hashicorp/go-multierror"
+  name = "github.com/jmespath/go-jmespath"
   packages = ["."]
-  revision = "b7773ae218740a7be65057fc60b366a49b538a44"
+  revision = "0b12d6b5"
+
+[[projects]]
+  name = "github.com/joho/godotenv"
+  packages = ["."]
+  revision = "a79fa1e548e2c689c241d10173efd51e5d689d5b"
+  version = "v1.2.0"
 
 [[projects]]
   name = "github.com/lucasb-eyer/go-colorful"
@@ -44,37 +78,6 @@
   version = "v0.2.2"
 
 [[projects]]
-  name = "github.com/pkg/errors"
-  packages = ["."]
-  revision = "645ef00459ed84a119197bfb8d8205042c6df63d"
-  version = "v0.8.0"
-
-[[projects]]
-  branch = "master"
-  name = "github.com/sigurn/crc8"
-  packages = ["."]
-  revision = "e55481d6f45c5a8f040343bace9013571dae103e"
-
-[[projects]]
-  branch = "master"
-  name = "github.com/sigurn/utils"
-  packages = ["."]
-  revision = "f19e41f79f8f006116f682c1af454591bc278ad4"
-
-[[projects]]
-  name = "gobot.io/x/gobot"
-  packages = [
-    ".",
-    "drivers/gpio",
-    "drivers/i2c",
-    "drivers/spi",
-    "platforms/raspi",
-    "sysfs"
-  ]
-  revision = "635adea96f788ab19bf77470b075f8db44d34fa0"
-  version = "1.11.0"
-
-[[projects]]
   name = "gocv.io/x/gocv"
   packages = ["."]
   revision = "09994446aec439b74e48f97f777026cc47a6fe14"
@@ -90,28 +93,9 @@
   ]
   revision = "af66defab954cb421ca110193eed9477c8541e2a"
 
-[[projects]]
-  branch = "master"
-  name = "periph.io/x/periph"
-  packages = [
-    ".",
-    "conn",
-    "conn/gpio",
-    "conn/gpio/gpioreg",
-    "conn/i2c",
-    "conn/i2c/i2creg",
-    "conn/physic",
-    "conn/pin",
-    "conn/spi",
-    "conn/spi/spireg",
-    "host/fs",
-    "host/sysfs"
-  ]
-  revision = "ea92d674709249d8448af0b182450cadd7181599"
-
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "d206c9b1e9688bc53ab5c32c7d0186c8528f1960d37ce85bc0d3ba29bb4cc3d1"
+  inputs-digest = "372f8206182aac1bcac233e0a2f54b6035f4b088dd2142e17e35d784ca88b837"
   solver-name = "gps-cdcl"
   solver-version = 1

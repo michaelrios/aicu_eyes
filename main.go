@@ -1,20 +1,3 @@
-// What it does:
-//
-// This example shows, how to use pretrained SSD (Single Shot Detection) detection networks in gocv.
-// Here, we detect human faces from the camera, but the setup is similar for any other kind of object detection.
-//
-// Download the (small, 5.1mb) Caffe model file from:
-// https://raw.githubusercontent.com/opencv/opencv_3rdparty/dnn_samples_face_detector_20180205_fp16/res10_300x300_ssd_iter_140000_fp16.caffemodel
-//
-// Also, you will need the prototxt file:
-// https://raw.githubusercontent.com/opencv/opencv/master/samples/dnn/face_detector/deploy.prototxt
-//
-// How to run:
-//
-// 		go run ./cmd/ssd-facedetect/main.go 0 [protofile] [modelfile]
-//
-// +build example
-
 package main
 
 import (
@@ -29,6 +12,10 @@ import (
 	"os"
 	"strconv"
 	"time"
+	"github.com/michaelrios/aicu_eyes/app"
+	"github.com/aws/aws-sdk-go-v2/service/dynamodb"
+	"github.com/aws/aws-sdk-go-v2/service/dynamodb/dynamodbattribute"
+	"github.com/joho/godotenv"
 )
 
 func min(a, b float32) float32 {
@@ -51,6 +38,47 @@ func main() {
 		return
 	}
 
+	err := godotenv.Load()
+	if err != nil {
+		log.Fatal("Error loading .env file")
+	}
+
+	dynamoConfig := &app.Dynamo{
+		Host: "https://dynamodb.us-east-1.amazonaws.com",
+		Region: "us-east-1",
+		Key: os.Getenv("AWS_KEY"),
+		Secret: os.Getenv("AWS_SECRET"),
+	}
+	db := dynamoConfig.CreateSession()
+
+	if db.IsHealthy() {
+		fmt.Println("DB is connected")
+	} else {
+		log.Fatal("DB is not Connected")
+	}
+
+	attributeMap, err := dynamodbattribute.MarshalMap(Customer{
+		Id: "999",
+		PerceivedTeam: "dodgers",
+		ShirtColors: []ShirtColor{
+			ShirtColor{Color: "blue"},
+		},
+		StartTime: time.Now(),
+	})
+
+	tableName := "perceived_table"
+	insertRequest := db.Insert(&dynamodb.PutItemInput{
+		Item: attributeMap,
+		TableName: &tableName,
+	})
+	output, err := insertRequest.Send()
+	if err != nil {
+		log.Fatalf("no insert: %s", err.Error())
+	}
+
+	fmt.Println(output.String())
+
+
 	//adaptor := raspi.NewAdaptor()
 	//
 	//echo := gpio.NewDirectPinDriver(adaptor, "26")
@@ -66,20 +94,6 @@ func main() {
 	//	fmt.Println(err.Error)
 	//}
 	//fmt.Println(interval)
-
-	/////////////////////////////
-	//f, err := os.Create("trace.out")
-	//if err != nil {
-	//	panic(err)
-	//}
-	//defer f.Close()
-	//
-	//err = trace.Start(f)
-	//if err != nil {
-	//	panic(err)
-	//}
-	//defer trace.Stop()
-	/////////////////////////////
 
 	// parse args
 	deviceID, _ := strconv.Atoi(os.Args[1])
@@ -211,11 +225,11 @@ func main() {
 }
 
 type Customer struct {
-	Id            string
-	PerceivedTeam string
-	ShirtColors   []ShirtColor
-	StartTime     time.Time
-	EndTime       time.Time
+	Id            string `json:"id"`
+	PerceivedTeam string `json:"perceived_team"`
+	ShirtColors   []ShirtColor `json:"shirt_colors"`
+	StartTime     time.Time `json:"start_time"`
+	EndTime       time.Time `json:"end_time"`
 }
 
 type ShirtColor struct {
