@@ -7,5 +7,6 @@
 .idea
 .idea/*
 
+/vendor
 main
-.env
+.env*
